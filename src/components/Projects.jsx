@@ -18,13 +18,13 @@ const Projects = () => {
     {
       id: 1,
       name: "E-Commerce Dashboard",
-      image: "/images/ecommerce.jpg",
+      image: "https://img.freepik.com/free-photo/showing-cart-trolley-shopping-online-sign-graphic_53876-133967.jpg?ga=GA1.1.605213918.1754971091&semt=ais_hybrid&w=740&q=80",
       description: "Designed a dynamic dashboard to visualize sales data, customer insights, and inventory levels using React, Chart.js, and Material UI."
     },
     {
       id: 2,
       name: "Task Management App",
-      image: "/images/task-management.jpeg",
+      image: "https://media.geeksforgeeks.org/wp-content/uploads/20240427182308/How-to-Manage-Tasks.webp",
       description: "Created a productivity tool with task creation, drag-and-drop prioritization, deadlines, and notifications using React and Redux Toolkit."
     },
   ];
