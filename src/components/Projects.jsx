@@ -24,7 +24,7 @@ const Projects = () => {
     {
       id: 2,
       name: "Task Management App",
-      image: "https://media.geeksforgeeks.org/wp-content/uploads/20240427182308/How-to-Manage-Tasks.webp",
+      image: "https://media.geeksforgeeks.org/wp-content/uploads/20240427182308/How-to-Manage-Tasks.webp ",
       description: "Created a productivity tool with task creation, drag-and-drop prioritization, deadlines, and notifications using React and Redux Toolkit."
     },
   ];

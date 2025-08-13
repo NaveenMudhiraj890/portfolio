@@ -10,10 +10,23 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredInput, setHoveredInput] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 300);
-    return () => clearTimeout(timer);
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -44,64 +57,106 @@ const Contact = () => {
     { icon: '🐦', name: 'Twitter', url: 'https://x.com/NaveenN63104368?t=2DkRPC0LXUYqujtdB-gpkg&s=09', color: '#1da1f2' },
   ];
 
+  const getResponsiveStyles = () => ({
+    ...styles,
+    contentGrid: {
+      ...styles.contentGrid,
+      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+      gap: isMobile ? '30px' : '40px',
+    },
+    title: {
+      ...styles.title,
+      fontSize: isMobile ? '2rem' : '2.5rem',
+    },
+    sectionTitle: {
+      ...styles.sectionTitle,
+      fontSize: isMobile ? '1.5rem' : '1.8rem',
+    },
+    description: {
+      ...styles.description,
+      fontSize: isMobile ? '0.9rem' : '1rem',
+    },
+    formContainer: {
+      ...styles.formContainer,
+      padding: isMobile ? '20px' : '30px',
+    },
+    contactItem: {
+      ...styles.contactItem,
+      padding: isMobile ? '8px' : '10px',
+      flexDirection: isMobile && window.innerWidth <= 480 ? 'column' : 'row',
+      textAlign: isMobile && window.innerWidth <= 480 ? 'center' : 'left',
+    },
+    socialContainer: {
+      ...styles.socialContainer,
+      justifyContent: isMobile ? 'center' : 'flex-start',
+    },
+    submitButton: {
+      ...styles.submitButton,
+      padding: isMobile ? '12px 24px' : '15px 30px',
+      fontSize: isMobile ? '1rem' : '1.1rem',
+    },
+  });
+
+  const responsiveStyles = getResponsiveStyles();
+
   return (
-    <section style={styles.section}>
-      <div style={styles.container}>
+    <section style={responsiveStyles.section}>
+      <div style={responsiveStyles.container}>
         {/* Title */}
         <div 
           style={{
-            ...styles.titleContainer,
+            ...responsiveStyles.titleContainer,
             transform: `translateY(${isVisible ? 0 : 50}px)`,
             opacity: isVisible ? 1 : 0,
           }}
           className="title-animation"
         >
-          <h2 style={styles.title} className="gradient-title">
+          <h2 style={responsiveStyles.title} className="gradient-title">
             Let's Connect
           </h2>
-          <div style={styles.titleUnderline} className="expanding-line" />
+          <div style={responsiveStyles.titleUnderline} className="expanding-line" />
         </div>
 
-        <div style={styles.contentGrid}>
+        <div style={responsiveStyles.contentGrid}>
           {/* Contact Info - Left Side */}
-          <div style={styles.leftSection}>
+          <div style={responsiveStyles.leftSection}>
             <div 
               style={{
-                ...styles.infoCard,
-                transform: `translateX(${isVisible ? 0 : -50}px)`,
+                ...responsiveStyles.infoCard,
+                transform: `translateX(${isVisible ? 0 : (isMobile ? 0 : -50)}px)`,
                 opacity: isVisible ? 1 : 0,
               }}
               className="info-card-animation"
             >
-              <h3 style={styles.sectionTitle} className="pulse-text">
+              <h3 style={responsiveStyles.sectionTitle} className="pulse-text">
                 Get In Touch
               </h3>
-              <p style={styles.description}>
+              <p style={responsiveStyles.description}>
                 Ready to bring your ideas to life? Let's create something amazing together!
               </p>
 
-              <div style={styles.contactList}>
+              <div style={responsiveStyles.contactList}>
                 {contactInfo.map((item, index) => (
                   <div
                     key={index}
                     style={{
-                      ...styles.contactItem,
+                      ...responsiveStyles.contactItem,
                       animationDelay: `${item.delay}s`,
                     }}
                     className="contact-item-slide"
                   >
-                    <span style={styles.contactIcon} className="bounce-icon">
+                    <span style={responsiveStyles.contactIcon} className="bounce-icon">
                       {item.icon}
                     </span>
                     <div>
-                      <div style={styles.contactLabel}>{item.label}</div>
-                      <div style={styles.contactValue}>{item.value}</div>
+                      <div style={responsiveStyles.contactLabel}>{item.label}</div>
+                      <div style={responsiveStyles.contactValue}>{item.value}</div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div style={styles.socialContainer}>
+              <div style={responsiveStyles.socialContainer}>
                 {socialLinks.map((social, index) => (
                   <a
                     key={index}
@@ -109,13 +164,13 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      ...styles.socialLink,
+                      ...responsiveStyles.socialLink,
                       animationDelay: `${0.5 + index * 0.1}s`,
                     }}
                     className="social-bounce"
                     aria-label={social.name}
                   >
-                    <span style={styles.socialIcon}>{social.icon}</span>
+                    <span style={responsiveStyles.socialIcon}>{social.icon}</span>
                   </a>
                 ))}
               </div>
@@ -123,25 +178,25 @@ const Contact = () => {
           </div>
 
           {/* Contact Form - Right Side */}
-          <div style={styles.rightSection}>
+          <div style={responsiveStyles.rightSection}>
             <div 
               style={{
-                ...styles.formContainer,
-                transform: `translateX(${isVisible ? 0 : 50}px)`,
+                ...responsiveStyles.formContainer,
+                transform: `translateX(${isVisible ? 0 : (isMobile ? 0 : 50)}px)`,
                 opacity: isVisible ? 1 : 0,
               }}
               className="form-slide-animation"
             >
               {isSubmitted && (
-                <div style={styles.successMessage} className="success-popup">
-                  <span style={styles.successIcon}>🚀</span>
+                <div style={responsiveStyles.successMessage} className="success-popup">
+                  <span style={responsiveStyles.successIcon}>🚀</span>
                   <span>Message sent successfully! I'll get back to you soon.</span>
                 </div>
               )}
 
-              <div style={styles.form}>
-                <div style={styles.inputGroup}>
-                  <label htmlFor="name" style={styles.label} className="floating-label">
+              <div style={responsiveStyles.form}>
+                <div style={responsiveStyles.inputGroup}>
+                  <label htmlFor="name" style={responsiveStyles.label} className="floating-label">
                     Full Name
                   </label>
                   <input
@@ -154,15 +209,15 @@ const Contact = () => {
                     onBlur={() => setHoveredInput(null)}
                     required
                     style={{
-                      ...styles.input,
-                      ...(hoveredInput === 'name' ? styles.inputFocused : {}),
+                      ...responsiveStyles.input,
+                      ...(hoveredInput === 'name' ? responsiveStyles.inputFocused : {}),
                     }}
                     className="animated-input"
                   />
                 </div>
 
-                <div style={styles.inputGroup}>
-                  <label htmlFor="email" style={styles.label} className="floating-label">
+                <div style={responsiveStyles.inputGroup}>
+                  <label htmlFor="email" style={responsiveStyles.label} className="floating-label">
                     Email Address
                   </label>
                   <input
@@ -175,15 +230,15 @@ const Contact = () => {
                     onBlur={() => setHoveredInput(null)}
                     required
                     style={{
-                      ...styles.input,
-                      ...(hoveredInput === 'email' ? styles.inputFocused : {}),
+                      ...responsiveStyles.input,
+                      ...(hoveredInput === 'email' ? responsiveStyles.inputFocused : {}),
                     }}
                     className="animated-input"
                   />
                 </div>
 
-                <div style={styles.inputGroup}>
-                  <label htmlFor="message" style={styles.label} className="floating-label">
+                <div style={responsiveStyles.inputGroup}>
+                  <label htmlFor="message" style={responsiveStyles.label} className="floating-label">
                     Your Message
                   </label>
                   <textarea
@@ -196,8 +251,8 @@ const Contact = () => {
                     onBlur={() => setHoveredInput(null)}
                     required
                     style={{
-                      ...styles.textarea,
-                      ...(hoveredInput === 'message' ? styles.inputFocused : {}),
+                      ...responsiveStyles.textarea,
+                      ...(hoveredInput === 'message' ? responsiveStyles.inputFocused : {}),
                     }}
                     className="animated-input"
                   />
@@ -206,11 +261,11 @@ const Contact = () => {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  style={styles.submitButton}
+                  style={responsiveStyles.submitButton}
                   className="pulse-button"
                 >
-                  <span style={styles.buttonText}>Send Message</span>
-                  <span style={styles.buttonIcon}>✨</span>
+                  <span style={responsiveStyles.buttonText}>Send Message</span>
+                  <span style={responsiveStyles.buttonIcon}>✨</span>
                 </button>
               </div>
             </div>
@@ -219,9 +274,9 @@ const Contact = () => {
       </div>
 
       {/* Floating background elements */}
-      <div style={styles.floatingElement1} className="floating-bg" />
-      <div style={styles.floatingElement2} className="floating-bg" />
-      <div style={styles.floatingElement3} className="floating-bg" />
+      <div style={responsiveStyles.floatingElement1} className="floating-bg" />
+      <div style={responsiveStyles.floatingElement2} className="floating-bg" />
+      <div style={responsiveStyles.floatingElement3} className="floating-bg" />
 
       <style>{`
         /* Title Animations */
@@ -393,7 +448,7 @@ const Contact = () => {
           }
         }
 
-        /* Responsive */
+        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
           .gradient-title {
             font-size: 2rem !important;
@@ -401,6 +456,32 @@ const Contact = () => {
           
           .contact-item-slide, .social-bounce {
             animation-delay: 0s !important;
+          }
+
+          .floating-bg {
+            display: none;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .gradient-title {
+            font-size: 1.8rem !important;
+          }
+        }
+
+        /* Touch-friendly interactions for mobile */
+        @media (hover: none) and (pointer: coarse) {
+          .pulse-button:hover {
+            transform: none;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+          }
+          
+          .social-bounce:hover {
+            transform: scale(1.1);
+          }
+          
+          .animated-input:focus {
+            transform: none;
           }
         }
       `}</style>
@@ -410,7 +491,7 @@ const Contact = () => {
 
 const styles = {
   section: {
-    padding: '60px 0',
+    padding: '40px 0',
     background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%)',
     color: '#ffffff',
     position: 'relative',
@@ -420,19 +501,20 @@ const styles = {
   container: {
     maxWidth: '1000px',
     margin: '0 auto',
-    padding: '0 20px',
+    padding: '0 15px',
     position: 'relative',
     zIndex: 2,
   },
   titleContainer: {
     textAlign: 'center',
-    marginBottom: '50px',
+    marginBottom: '40px',
     transition: 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   },
   title: {
     fontSize: '2.5rem',
     fontWeight: '800',
     marginBottom: '10px',
+    lineHeight: '1.2',
   },
   titleUnderline: {
     height: '4px',
@@ -444,10 +526,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '40px',
-    '@media (max-width: 768px)': {
-      gridTemplateColumns: '1fr',
-      gap: '30px',
-    },
+    alignItems: 'start',
   },
   leftSection: {
     display: 'flex',
@@ -476,7 +555,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '15px',
-    marginBottom: '20px',
+    marginBottom: '15px',
     padding: '10px',
     borderRadius: '10px',
     background: 'rgba(255, 255, 255, 0.05)',
@@ -503,10 +582,12 @@ const styles = {
     fontSize: '1rem',
     color: '#e2e8f0',
     fontWeight: '600',
+    wordBreak: 'break-word',
   },
   socialContainer: {
     display: 'flex',
     gap: '15px',
+    flexWrap: 'wrap',
   },
   socialLink: {
     width: '45px',
@@ -519,6 +600,7 @@ const styles = {
     textDecoration: 'none',
     backdropFilter: 'blur(10px)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
+    transition: 'all 0.3s ease',
   },
   socialIcon: {
     fontSize: '1.3rem',
@@ -590,6 +672,7 @@ const styles = {
     resize: 'vertical',
     minHeight: '100px',
     boxSizing: 'border-box',
+    fontFamily: 'inherit',
   },
   inputFocused: {
     borderColor: '#3b82f6',
@@ -609,6 +692,7 @@ const styles = {
     justifyContent: 'center',
     gap: '10px',
     marginTop: '10px',
+    width: '100%',
   },
   buttonText: {
     fontSize: '1rem',

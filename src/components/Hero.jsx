@@ -134,7 +134,7 @@ const Hero = () => {
           >
             <div className="floating-container hero-image-container">
               <img
-                src="./images/men.avif"
+                src="https://as1.ftcdn.net/v2/jpg/06/44/10/28/1000_F_644102868_xx6oa6vchEMguYtBNxfnEUn70wK6a1OK.jpg"
                 alt="Dasari Naveen - Full Stack Developer"
                 className="hero-profile-image hero-profile-image-3d"
                 onError={(e) => {
