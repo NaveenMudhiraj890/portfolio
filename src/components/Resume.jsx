@@ -601,7 +601,7 @@ const Resume = () => {
           className="header-animation"
         >
           <h2 style={styles.title} className="gradient-title">
-            Resume & CV
+            Resume
           </h2>
           <div style={styles.titleUnderline} className="expanding-line" />
           
